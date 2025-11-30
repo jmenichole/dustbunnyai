@@ -76,6 +76,28 @@ export default function HomePage() {
           Start Cleaning — Free Forever Plan Available
         </a>
       </section>
+
+        {/* Footer */}
+        <footer className="bg-gray-100 py-8 px-6 mt-auto">
+          <div className="max-w-6xl mx-auto text-center">
+            <div className="flex justify-center gap-6 mb-4 text-sm text-gray-600">
+              <a href="/privacy" className="hover:text-purple-600 transition">
+                Privacy Policy
+              </a>
+              <span className="text-gray-400">•</span>
+              <a href="/terms" className="hover:text-purple-600 transition">
+                Terms of Service
+              </a>
+              <span className="text-gray-400">•</span>
+              <a href="mailto:support@dustbunny.ai" className="hover:text-purple-600 transition">
+                Contact
+              </a>
+            </div>
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} DustBunny AI. All rights reserved.
+            </p>
+          </div>
+        </footer>
     </main>
   );
 }
