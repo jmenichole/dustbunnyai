@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  image         String?
+  
+  // OAuth tokens
+  googleAccessToken   String?
+  googleRefreshToken  String?
+  googleExpiresAt     DateTime?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  emails        Email[]
+  subscriptions Subscription[]
+  privacyScans  PrivacyScan[]
+  reports       Report[]
+}
+
+model Email {
+  id            String   @id @default(cuid())
+  userId        String
+  gmailId       String   @unique
+  threadId      String?
+  subject       String?
+  from          String?
+  to            String?
+  date          DateTime?
+  snippet       String?
+  body          String?  @db.Text
+  labels        String[]
+  category      String?  // promotional, subscription, important, etc.
+  unsubscribeLink String?
+  cleaned       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([category])
+  @@index([cleaned])
+}
+
+model Subscription {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  email         String
+  category      String?
+  frequency     String?  // daily, weekly, monthly
+  cost          Float?
+  currency      String?  @default("USD")
+  unsubscribed  Boolean  @default(false)
+  canCancel     Boolean  @default(false)
+  cancelUrl     String?
+  lastEmailDate DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([unsubscribed])
+}
+
+model PrivacyScan {
+  id            String   @id @default(cuid())
+  userId        String
+  email         String
+  breached      Boolean  @default(false)
+  breachCount   Int      @default(0)
+  breaches      Json?    // Details of breaches
+  scannedAt     DateTime @default(now())
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([email])
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  userId        String
+  weekStart     DateTime
+  weekEnd       DateTime
+  emailsCleaned Int      @default(0)
+  spaceFreed    Int      @default(0) // in MB
+  subscriptionsFound Int @default(0)
+  moneySaved    Float?   @default(0)
+  summary       String?
+  details       Json?
+  createdAt     DateTime @default(now())
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([weekStart])
+}

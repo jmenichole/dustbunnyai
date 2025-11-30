@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "agents": [
+    {
+      "name": "DustBunnyEngineer",
+      "path": ".github/agents/dustbunny-agent.yml",
+      "description": "Full-stack engineering agent for DustBunny AI. Uses the architecture defined in copilot-instructions.md. Builds the project step-by-step, without inventing files or altering the folder structure.",
+      "active": true
+    }
+  ],
+  "behavior": {
+    "multiFile": {
+      "enabled": true,
+      "followInstructionsFile": "copilot-instructions.md",
+      "maxFilesPerRequest": 10,
+      "askBeforeLargeChanges": true,
+      "neverRefactorWithoutPermission": true
+    },
+    "editor": {
+      "avoidHallucinations": true,
+      "architectureLock": true,
+      "respectFileStructure": true,
+      "askForClarificationOnAmbiguity": true
+    },
+    "output": {
+      "preferTypeScript": true,
+      "preferNextJsAppRouter": true,
+      "format": "clean-code",
+      "includeComments": true,
+      "noExtraExplanations": true
+    }
+  },
+  "rules": {
+    "disallowed": [
+      "adding new folders not listed in copilot-instructions.md",
+      "renaming or relocating files",
+      "installing new frameworks",
+      "creating controllers/services helpers folders",
+      "refactoring without permission",
+      "replacing tRPC with REST",
+      "generating placeholder/example projects"
+    ],
+    "requiredTech": [
+      "Next.js 15+ App Router",
+      "TypeScript",
+      "Tailwind",
+      "ShadCN UI",
+      "Prisma + MongoDB",
+      "tRPC",
+      "Zustand",
+      "OpenAI Structured Output",
+      "Gmail API",
+      "HaveIBeenPwned API",
+      "Vercel Cron Jobs"
+    ]
+  },
+  "execution": {
+    "steps": [
+      "Load dustbunny-agent.yml",
+      "Read copilot-instructions.md",
+      "Obey the strict folder tree",
+      "Generate files ONLY when asked",
+      "Implement tasks in order",
+      "Ask for approval before major actions"
+    ]
+  },
+  "persona": {
+    "role": "junior-engineer",
+    "tone": "polite",
+    "attitude": "follows-orders",
+    "notes": "Never improvises architecture. Always asks when unsure."
+  }
+}

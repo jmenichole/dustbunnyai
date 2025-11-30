@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FAFAFA;
+  --foreground: #2A2A2A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), Inter, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--font-sora), Sora, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #C9BBFF, #A9D8FF);
+}
+.gradient-alt {
+  background: linear-gradient(135deg, #FFD4C2, #CFFFE3);
+}
+
+.card-base {
+  @apply rounded-brand shadow-brand bg-white;
+}
+
+.soft-shadow {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

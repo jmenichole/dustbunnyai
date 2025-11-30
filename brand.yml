@@ -1,0 +1,71 @@
+Bunny Lavender: #C9BBFF
+Soft Sky Blue: #A9D8FF
+Peach Fuzz: #FFD4C2
+Mint Clean: #CFFFE3
+Charcoal Dust: #2A2A2A
+Offwhite Clean: #FAFAFA
+
+Warning Yellow: #FFE57F
+Success Mint: #7CFFC4
+Error Pink: #FF8E94
+
+background: linear-gradient(135deg, #C9BBFF, #A9D8FF);
+background: linear-gradient(135deg, #FFD4C2, #CFFFE3);
+
+Fonts
+Primary: Inter
+(Modern, clean, perfect for SaaS)
+Secondary: Sora
+(For bunny personality + headings)
+
+Visual Style
+Soft rounded corners
+Shadow smudges like dustballs
+Clean UI panels
+Light pastel gradients
+Micro-animations on hover and load
+Bunny avatar ALWAYS visible at key actions
+
+suggested landing page 
+<section class="hero text-center py-24 bg-gradient-to-br from-purple-200 to-blue-200">
+  <h1 class="text-5xl font-bold text-gray-900 mb-4">
+    Your inbox has a mess. <br />Meet the AI that cleans it.
+  </h1>
+  <p class="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+    DustBunny AI finds your subscriptions, deletes junk, unsubscribes from spam,
+    and saves you money automatically — with a cute little bunny doing all the hard work.
+  </p>
+  <a href="/dashboard" class="bg-purple-600 text-white px-6 py-3 rounded-xl text-lg shadow-lg hover:opacity-90">
+    Start Cleaning — It's Free
+  </a>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-3 gap-10 py-16 max-w-6xl mx-auto">
+  <div class="feature-card p-6 bg-white rounded-2xl shadow">
+    <h3 class="text-xl font-semibold">🧹 Inbox Cleanup</h3>
+    <p>Finds junk, groups receipts, highlights important messages — automatically.</p>
+  </div>
+  
+  <div class="feature-card p-6 bg-white rounded-2xl shadow">
+    <h3 class="text-xl font-semibold">🔔 Subscription Finder</h3>
+    <p>See every subscription you're paying for — even the ones you forgot existed.</p>
+  </div>
+
+  <div class="feature-card p-6 bg-white rounded-2xl shadow">
+    <h3 class="text-xl font-semibold">🚫 Auto-Unsubscribe</h3>
+    <p>DustBunny handles all the annoying unsubscribe flows so you never have to.</p>
+  </div>
+</section>
+
+<section class="bg-gray-50 py-20">
+  <h2 class="text-4xl font-bold text-center mb-6">🤑 Saves you real money</h2>
+  <p class="text-center text-gray-700 max-w-xl mx-auto mb-12">
+    Users save an average of <strong>$300–$1200/year</strong> by canceling forgotten subscriptions.
+  </p>
+</section>
+
+<section class="py-20 text-center">
+  <a href="/dashboard" class="bg-blue-600 text-white px-6 py-4 rounded-lg text-xl shadow-md hover:opacity-90">
+    Start Cleaning — Free Forever Plan Available
+  </a>
+</section>

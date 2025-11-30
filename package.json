@@ -1,0 +1,41 @@
+{
+  "name": "dustbunny-ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "@tanstack/react-query": "^5.90.11",
+    "@trpc/client": "^11.7.2",
+    "@trpc/next": "^11.7.2",
+    "@trpc/react-query": "^11.7.2",
+    "@trpc/server": "^11.7.2",
+    "googleapis": "^128.0.0",
+    "hibp": "^13.0.0",
+    "next": "14.2.22",
+    "next-auth": "^4.24.13",
+    "openai": "^4.20.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.22",
+    "postcss": "^8",
+    "prisma": "^5.7.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
