@@ -6,11 +6,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col">
       {/* Hero Section */}
-      <section
-        className="relative w-full text-center py-24 px-6 overflow-hidden gradient-hero"
-      >
-        <div className="absolute inset-0 opacity-30" style={{backgroundImage: 'url(/brand/hero-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center'}} />
-        <div className="relative">
+      <section className="relative w-full text-center py-24 px-6 overflow-hidden gradient-hero">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-5xl font-bold text-gray-900 mb-4 leading-tight">
             Your inbox has a mess.<br />Meet the AI that cleans it.
@@ -33,18 +29,17 @@ export default function HomePage() {
               Sign In with Gmail
             </a>
           </div>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-8">
             <Image
               src="/brand/mascot-hero.png"
-              width={520}
-              height={360}
+              width={480}
+              height={340}
               alt="DustBunny mascot celebrating a clean inbox"
               priority
-              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 60vw, 520px"
-              className="drop-shadow-xl rounded-2xl"
+              sizes="(max-width: 640px) 320px, (max-width: 1024px) 400px, 480px"
+              className="drop-shadow-2xl rounded-3xl max-w-full h-auto"
             />
           </div>
-        </div>
         </div>
       </section>
 
