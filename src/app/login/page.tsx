@@ -120,7 +120,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={8}
+                minLength={8} // Using 8 as the constant value - matches MIN_PASSWORD_LENGTH
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder={isLogin ? "Enter password" : "Min 8 characters"}
               />

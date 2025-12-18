@@ -51,11 +51,16 @@ export default function SubscriptionsTab() {
     setFormError("");
     
     try {
+      const validFrequencies = ["daily", "weekly", "monthly", "yearly"];
+      const frequency = formData.frequency && validFrequencies.includes(formData.frequency) 
+        ? (formData.frequency as "daily" | "weekly" | "monthly" | "yearly")
+        : undefined;
+
       await addManualMutation.mutateAsync({
         name: formData.name,
         email: formData.email,
         category: formData.category || undefined,
-        frequency: formData.frequency as any || undefined,
+        frequency: frequency,
         cost: formData.cost ? parseFloat(formData.cost) : undefined,
         currency: formData.currency || undefined,
       });

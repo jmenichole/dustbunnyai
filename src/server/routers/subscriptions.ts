@@ -2,6 +2,7 @@ import { z } from "zod";
 import { router, protectedProcedure } from "../trpc-core";
 import { TRPCError } from "@trpc/server";
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_CURRENCY } from "@/lib/constants";
 import {
   detectSubscriptions,
   findRecurringSubscriptions,
@@ -115,7 +116,7 @@ export const subscriptionsRouter = router({
           category: input.category || null,
           frequency: input.frequency || null,
           cost: input.cost || null,
-          currency: input.currency || "USD",
+          currency: input.currency || DEFAULT_CURRENCY,
         },
       });
     }),
