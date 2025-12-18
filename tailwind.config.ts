@@ -22,8 +22,8 @@ const config: Config = {
         error: "#FF8E94",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "sans-serif"],
-        heading: ["var(--font-sora)", "Sora", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
+        heading: ["Sora", "sans-serif"],
       },
       borderRadius: {
         brand: "16px",
