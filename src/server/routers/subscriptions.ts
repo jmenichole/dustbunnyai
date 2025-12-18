@@ -75,4 +75,48 @@ export const subscriptionsRouter = router({
         data: { unsubscribed: true },
       });
     }),
+
+  addManual: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().email("Invalid email"),
+        category: z.string().optional(),
+        frequency: z.enum(["daily", "weekly", "monthly", "yearly"]).optional(),
+        cost: z.number().min(0).optional(),
+        currency: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (!ctx.userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      // Check if subscription already exists
+      const existing = await prisma.subscription.findFirst({
+        where: {
+          userId: ctx.userId,
+          email: input.email,
+        },
+      });
+
+      if (existing) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Subscription already exists for this email",
+        });
+      }
+
+      return await prisma.subscription.create({
+        data: {
+          userId: ctx.userId,
+          name: input.name,
+          email: input.email,
+          category: input.category || null,
+          frequency: input.frequency || null,
+          cost: input.cost || null,
+          currency: input.currency || "USD",
+        },
+      });
+    }),
 });

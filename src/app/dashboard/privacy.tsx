@@ -65,11 +65,19 @@ export default function PrivacyTab() {
           <Button onClick={handleScanBreaches} disabled={isScanning} variant="outline">
             {isScanning ? <BunnyLoader size="sm" /> : "🔍 Scan Breaches"}
           </Button>
-          <Button onClick={handleScanPII} disabled={isScanning}>
-            {isScanning ? <BunnyLoader size="sm" /> : "🔍 Scan PII"}
+          <Button onClick={handleScanPII} disabled={isScanning} title="Requires Gmail connection">
+            {isScanning ? <BunnyLoader size="sm" /> : "🔍 Scan PII (Gmail)"}
           </Button>
         </div>
       </div>
+
+      <Card className="bg-blue-50 mb-6 p-4">
+        <p className="text-sm text-gray-700">
+          <strong>🔓 Works without Gmail:</strong> Breach scanning checks your registered email against known data breaches.
+          <br />
+          <strong>📧 Requires Gmail:</strong> PII scanning analyzes your email content for sensitive information.
+        </p>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <MetricCard label="Total Issues" value={scans.length} />

@@ -82,6 +82,11 @@ async function generateReportForUser(userId: string) {
 }
 
 async function generateAISummary(stats: any, topSenders: string[]) {
+  // If OpenAI is not configured, return a simple summary
+  if (!openai) {
+    return `You received ${stats.total} emails this week. ${stats.promotional} were promotional and ${stats.important} were marked important.`;
+  }
+
   try {
     const prompt = `Generate a friendly weekly email summary based on these stats:
 

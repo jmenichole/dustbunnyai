@@ -10,11 +10,23 @@ import Card from "@/components/Card";
 
 export default function SubscriptionsTab() {
   const [isDetecting, setIsDetecting] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    category: "",
+    frequency: "",
+    cost: "",
+    currency: "USD",
+  });
+  const [formError, setFormError] = useState("");
+  
   const { data: subs = [], refetch } = trpc.subscriptions.list.useQuery();
   const { data: costs } = trpc.subscriptions.costs.useQuery();
   const { data: recurring = [] } = trpc.subscriptions.recurring.useQuery();
   const unsubscribeMutation = trpc.subscriptions.unsubscribe.useMutation();
   const detectMutation = trpc.subscriptions.detect.useMutation();
+  const addManualMutation = trpc.subscriptions.addManual.useMutation();
 
   async function handleDetect() {
     setIsDetecting(true);
@@ -34,15 +46,50 @@ export default function SubscriptionsTab() {
     refetch();
   }
 
+  async function handleAddManual(e: React.FormEvent) {
+    e.preventDefault();
+    setFormError("");
+    
+    try {
+      await addManualMutation.mutateAsync({
+        name: formData.name,
+        email: formData.email,
+        category: formData.category || undefined,
+        frequency: formData.frequency as any || undefined,
+        cost: formData.cost ? parseFloat(formData.cost) : undefined,
+        currency: formData.currency || undefined,
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        category: "",
+        frequency: "",
+        cost: "",
+        currency: "USD",
+      });
+      setShowAddForm(false);
+      refetch();
+    } catch (error: any) {
+      setFormError(error.message || "Failed to add subscription");
+    }
+  }
+
   const active = subs.filter((s) => !s.unsubscribed);
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <SectionTitle title="💳 Subscriptions" />
-        <Button onClick={handleDetect} disabled={isDetecting}>
-          {isDetecting ? <BunnyLoader size="sm" /> : "🔍 Detect Subscriptions"}
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowAddForm(!showAddForm)} variant="outline">
+            ➕ Add Manual
+          </Button>
+          <Button onClick={handleDetect} disabled={isDetecting}>
+            {isDetecting ? <BunnyLoader size="sm" /> : "🔍 Detect from Gmail"}
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -51,6 +98,111 @@ export default function SubscriptionsTab() {
         <MetricCard label="Yearly Cost" value={costs ? `$${costs.yearly.toFixed(2)}` : "$0.00"} />
         <MetricCard label="Unsubscribed" value={subs.length - active.length} />
       </div>
+
+      {showAddForm && (
+        <Card className="mb-6 p-6">
+          <h3 className="font-semibold mb-4">Add Subscription Manually</h3>
+          <form onSubmit={handleAddManual} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  placeholder="Netflix"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  placeholder="info@netflix.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  placeholder="streaming"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Frequency
+                </label>
+                <select
+                  value={formData.frequency}
+                  onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                >
+                  <option value="">Select...</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Cost
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={formData.cost}
+                  onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                  placeholder="9.99"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Currency
+                </label>
+                <select
+                  value={formData.currency}
+                  onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                >
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                </select>
+              </div>
+            </div>
+            {formError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded text-sm">
+                {formError}
+              </div>
+            )}
+            <div className="flex gap-2 justify-end">
+              <Button type="button" variant="outline" onClick={() => setShowAddForm(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                Add Subscription
+              </Button>
+            </div>
+          </form>
+        </Card>
+      )}
 
       {recurring.length > 0 && (
         <Card className="bg-blue-50 mb-6">

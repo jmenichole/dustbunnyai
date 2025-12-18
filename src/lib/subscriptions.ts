@@ -62,6 +62,12 @@ export async function detectSubscriptions(userId: string) {
 }
 
 async function analyzeSubscription(subject: string, snippet: string, body: string) {
+  // If OpenAI is not configured, return null values
+  if (!openai) {
+    console.warn("OpenAI not configured, skipping subscription analysis");
+    return { category: null, frequency: null, cost: null, currency: null };
+  }
+
   try {
     const prompt = `Analyze this email to detect subscription details:
 

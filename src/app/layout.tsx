@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Sora } from "next/font/google";
 import "./globals.css";
 import { TRPCProvider } from "@/lib/trpc-provider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
+// Use system fonts instead of Google Fonts to avoid network dependencies
+// const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+// const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
 
 export const metadata: Metadata = {
   title: "DustBunny AI - Smart Email Cleanup",
@@ -26,7 +26,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/brand/logo.png" />
       </head>
-      <body className={`${inter.variable} ${sora.variable} font-sans bg-offwhite text-charcoal`}>
+      <body className="font-sans bg-offwhite text-charcoal">
         <TRPCProvider>{children}</TRPCProvider>
       </body>
     </html>

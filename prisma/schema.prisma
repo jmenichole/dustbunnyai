@@ -16,7 +16,10 @@ model User {
   name          String?
   image         String?
   
-  // OAuth tokens
+  // Password authentication (alternative to OAuth)
+  passwordHash  String?
+  
+  // OAuth tokens (optional)
   googleAccessToken   String?
   googleRefreshToken  String?
   googleExpiresAt     DateTime?
