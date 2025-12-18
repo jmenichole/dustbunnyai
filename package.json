@@ -10,6 +10,8 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@azure/msal-node": "^3.8.4",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@prisma/client": "^5.7.0",
     "@tanstack/react-query": "^5.90.11",
     "@trpc/client": "^11.7.2",

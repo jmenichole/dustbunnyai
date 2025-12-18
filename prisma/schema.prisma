@@ -19,10 +19,29 @@ model User {
   // Password authentication (alternative to OAuth)
   passwordHash  String?
   
-  // OAuth tokens (optional)
+  // OAuth tokens for email providers (optional)
+  // Gmail OAuth
   googleAccessToken   String?
   googleRefreshToken  String?
   googleExpiresAt     DateTime?
+  
+  // Microsoft/Outlook OAuth
+  microsoftAccessToken   String?
+  microsoftRefreshToken  String?
+  microsoftExpiresAt     DateTime?
+  
+  // Yahoo OAuth
+  yahooAccessToken   String?
+  yahooRefreshToken  String?
+  yahooExpiresAt     DateTime?
+  
+  // iCloud OAuth (uses Apple ID)
+  icloudAccessToken   String?
+  icloudRefreshToken  String?
+  icloudExpiresAt     DateTime?
+  
+  // Track which email provider is connected
+  emailProvider String?  // "gmail" | "microsoft" | "yahoo" | "icloud" | null
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

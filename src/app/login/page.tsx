@@ -160,13 +160,40 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="text-center text-sm text-gray-600 mb-3">Or</div>
-            <a
-              href="/api/auth"
-              className="block w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition text-center"
-            >
-              Continue with Gmail
-            </a>
+            <div className="text-center text-sm text-gray-600 mb-3">Or connect your email</div>
+            <div className="space-y-2">
+              <a
+                href="/api/auth"
+                className="flex items-center justify-center gap-2 w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition"
+              >
+                <span>📧</span> Continue with Gmail
+              </a>
+              <a
+                href="/api/auth/microsoft"
+                className="flex items-center justify-center gap-2 w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition"
+              >
+                <span>📨</span> Continue with Outlook
+              </a>
+              <details className="text-sm text-gray-500">
+                <summary className="cursor-pointer hover:text-gray-700 text-center py-2">
+                  More email providers
+                </summary>
+                <div className="space-y-2 mt-2">
+                  <a
+                    href="/api/auth/yahoo"
+                    className="flex items-center justify-center gap-2 w-full bg-gray-100 border border-gray-300 text-gray-600 py-2 rounded-lg text-sm hover:bg-gray-200 transition"
+                  >
+                    <span>💌</span> Yahoo Mail (Coming Soon)
+                  </a>
+                  <a
+                    href="/api/auth/icloud"
+                    className="flex items-center justify-center gap-2 w-full bg-gray-100 border border-gray-300 text-gray-600 py-2 rounded-lg text-sm hover:bg-gray-200 transition"
+                  >
+                    <span>☁️</span> iCloud Mail (Coming Soon)
+                  </a>
+                </div>
+              </details>
+            </div>
           </div>
         </Card>
 
