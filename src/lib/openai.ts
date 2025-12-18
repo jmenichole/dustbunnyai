@@ -5,17 +5,23 @@ let openaiInstance: OpenAI | null = null;
 
 function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey && typeof window === 'undefined') {
+      // Only throw error on server-side when API key is actually needed
+      // This allows the build to complete but will fail at runtime if used without key
+      console.warn('OPENAI_API_KEY is not set. OpenAI features will not work.');
+    }
     openaiInstance = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || '',
+      apiKey: apiKey || 'sk-placeholder',
     });
   }
   return openaiInstance;
 }
 
 export const openai = new Proxy({} as OpenAI, {
-  get: (target, prop) => {
+  get: (target, prop: string | symbol) => {
     const client = getOpenAIClient();
-    const value = (client as any)[prop];
+    const value = (client as unknown as Record<string | symbol, unknown>)[prop];
     return typeof value === 'function' ? value.bind(client) : value;
   }
 });
