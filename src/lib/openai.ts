@@ -1,8 +1,11 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Make OpenAI optional - only initialize if API key is provided
+const openai = process.env.OPENAI_API_KEY 
+  ? new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  : null;
 
 export { openai };
 
@@ -23,6 +26,12 @@ export async function classifyEmail(
   from: string, 
   snippet: string
 ): Promise<EmailCategory> {
+  // If OpenAI is not configured, return a default category
+  if (!openai) {
+    console.warn("OpenAI not configured, using default classification");
+    return "updates";
+  }
+
   try {
     const prompt = `Classify this email into ONE category: promotional, subscription, important, newsletter, spam, personal, receipt, social, or updates.
 

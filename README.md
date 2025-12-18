@@ -66,11 +66,15 @@ dustbunny-ai/
 
 ### Prerequisites
 
+**Required:**
 - Node.js 18+ or Bun
 - pnpm (recommended) or npm
 - PostgreSQL database
-- Google Cloud Console account (for Gmail API)
-- OpenAI API key
+
+**Optional (for specific features):**
+- Google Cloud Console account (for Gmail API integration)
+- OpenAI API key (for AI classification and summaries)
+- HaveIBeenPwned API key (for breach scanning)
 
 ### Environment Setup
 
@@ -80,27 +84,25 @@ dustbunny-ai/
 cp .env.example .env
 ```
 
-2. Fill in your environment variables:
+2. Fill in your environment variables (only DATABASE_URL is required):
 
 ```env
-# Database
+# Database (required)
 DATABASE_URL="postgresql://user:password@localhost:5432/dustbunny"
 
-# Gmail API
+# Gmail API (optional - for Gmail integration)
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 GOOGLE_REDIRECT_URI="http://localhost:3000/api/auth/callback"
 
-# OpenAI
+# OpenAI (optional - for AI features)
 OPENAI_API_KEY="your-openai-api-key"
 
-# HaveIBeenPwned (optional)
+# HaveIBeenPwned (optional - for breach scanning)
 HIBP_API_KEY="your-hibp-api-key"
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-nextauth-secret"
 ```
+
+**Note:** You can start using DustBunny AI with just the database URL. Other keys enable specific features.
 
 ### Installation
 
@@ -125,7 +127,25 @@ pnpm dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Google OAuth Setup
+## Authentication Options
+
+DustBunny AI supports two authentication methods:
+
+### 1. Email/Password (No Gmail Required) ✨
+- Sign up with just email and password
+- Access privacy scanning and manual subscription management
+- Perfect for users who want to try the platform first
+
+### 2. Gmail OAuth (Full Features)
+- Connect your Gmail account for full inbox management
+- Automatic email sync and subscription detection
+- AI-powered email cleanup
+
+See [AUTHENTICATION.md](AUTHENTICATION.md) for detailed documentation.
+
+## Google OAuth Setup (Optional)
+
+Only required if you want Gmail integration:
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one

@@ -17,10 +17,10 @@ export default function HomePage() {
           </p>
           <div className="flex justify-center gap-4 mb-10">
             <a
-              href="/dashboard"
+              href="/login"
               className="bg-purple-600 text-white px-6 py-3 rounded-xl text-lg shadow-lg hover:opacity-90 transition"
             >
-              Start Cleaning — It&apos;s Free
+              Get Started — It&apos;s Free
             </a>
             <a
               href="/api/auth"
@@ -70,7 +70,7 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 text-center">
         <a
-          href="/dashboard"
+          href="/login"
           className="bg-blue-600 text-white px-8 py-4 rounded-xl text-xl shadow-md hover:opacity-90 transition"
         >
           Start Cleaning — Free Forever Plan Available
