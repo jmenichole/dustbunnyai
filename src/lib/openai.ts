@@ -43,6 +43,12 @@ export async function classifyEmail(
   from: string, 
   snippet: string
 ): Promise<EmailCategory> {
+  // If OpenAI is not configured, return a default category
+  if (!openai) {
+    console.warn("OpenAI not configured, using default classification");
+    return "updates";
+  }
+
   try {
     const prompt = `Classify this email into ONE category: promotional, subscription, important, newsletter, spam, personal, receipt, social, or updates.
 

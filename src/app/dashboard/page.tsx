@@ -31,16 +31,24 @@ export default function DashboardPage() {
             sizes="(max-width: 640px) 200px, (max-width: 1024px) 220px, 260px"
             className="mx-auto mb-6 drop-shadow-lg"
           />
-          <h2 className="text-2xl font-bold mb-3">A fresh start! ✨</h2>
+          <h2 className="text-2xl font-bold mb-3">Welcome to DustBunny! ✨</h2>
             <p className="text-gray-600 mb-6">
-              Connect your Gmail and let the DustBunny begin tidying your inbox—classification, subscriptions, privacy scans and more.
+              Connect Gmail for full inbox management, or start using privacy scans and subscription tracking right away.
             </p>
-            <a
-              href="/api/auth"
-              className="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition"
-            >
-              Connect Gmail
-            </a>
+            <div className="space-y-3">
+              <a
+                href="/api/auth"
+                className="block bg-purple-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition"
+              >
+                Connect Gmail (Optional)
+              </a>
+              <a
+                href="/dashboard/privacy"
+                className="block bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg shadow hover:bg-gray-50 transition"
+              >
+                Start with Privacy Scan
+              </a>
+            </div>
         </div>
       </div>
     );

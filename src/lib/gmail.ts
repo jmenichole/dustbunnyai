@@ -1,99 +1,46 @@
-import { google } from "googleapis";
 import { prisma } from "./prisma";
+import {
+  fetchEmailsFromProvider,
+  getUserEmailProvider,
+  getGmailClient as getGmailClientFromProvider,
+} from "./email-providers";
 
-export async function getGmailClient(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user || !user.googleAccessToken) {
-    throw new Error("No Google tokens found");
-  }
-
-  const oauth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
-  );
-
-  oauth2Client.setCredentials({
-    access_token: user.googleAccessToken,
-    refresh_token: user.googleRefreshToken,
-    expiry_date: user.googleExpiresAt?.getTime(),
-  });
-
-  // Handle automatic token refresh
-  oauth2Client.on("tokens", async (tokens) => {
-    if (tokens.access_token) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          googleAccessToken: tokens.access_token,
-          googleExpiresAt: tokens.expiry_date
-            ? new Date(tokens.expiry_date)
-            : undefined,
-        },
-      });
-    }
-  });
-
-  return google.gmail({ version: "v1", auth: oauth2Client });
-}
-
-function getHeader(headers: any[], name: string) {
-  return headers.find((h) => h.name === name)?.value || null;
-}
+// Re-export for backward compatibility
+export { getGmailClient } from "./email-providers";
 
 export async function fetchEmails(userId: string, max = 50) {
-  const gmail = await getGmailClient(userId);
+  // Get user's email provider
+  const provider = await getUserEmailProvider(userId);
 
-  // Fetch list of messages
-  const { data } = await gmail.users.messages.list({
-    userId: "me",
-    maxResults: max,
-  });
+  if (!provider) {
+    throw new Error("No email provider connected");
+  }
 
-  if (!data.messages) return [];
+  // Fetch emails from the provider
+  const messages = await fetchEmailsFromProvider(userId, provider, max);
 
-  let results: any[] = [];
+  const results: any[] = [];
 
-  for (const msg of data.messages) {
-    const full = await gmail.users.messages.get({
-      userId: "me",
-      id: msg.id!,
-      format: "full",
-    });
-
-    const headers = full.data.payload?.headers || [];
-    const bodyPart =
-      full.data.payload?.parts?.find((p) => p.mimeType === "text/plain") ||
-      full.data.payload;
-
-    const body = bodyPart?.body?.data
-      ? Buffer.from(bodyPart.body.data, "base64").toString()
-      : "";
-
+  for (const msg of messages) {
     const email = {
       userId,
-      gmailId: msg.id!,
-      threadId: full.data.threadId || null,
-      subject: getHeader(headers, "Subject"),
-      from: getHeader(headers, "From"),
-      to: getHeader(headers, "To"),
-      snippet: full.data.snippet || null,
-      body,
-      date: full.data.internalDate
-        ? new Date(Number(full.data.internalDate))
-        : new Date(),
-      labels: full.data.labelIds || [],
-      unsubscribeLink: getHeader(headers, "List-Unsubscribe"),
+      gmailId: msg.id, // Keep as gmailId for backward compatibility
+      threadId: msg.threadId || null,
+      subject: msg.subject || null,
+      from: msg.from || null,
+      to: msg.to || null,
+      snippet: msg.snippet || null,
+      body: msg.body || null,
+      date: msg.date,
+      labels: msg.labels || [],
+      unsubscribeLink: msg.unsubscribeLink || null,
     };
 
     results.push(email);
 
     // Store if not already saved
     await prisma.email.upsert({
-      where: { gmailId: msg.id! },
+      where: { gmailId: msg.id },
       update: email,
       create: email,
     });
@@ -107,7 +54,27 @@ export async function ingestGmailEmails(userId: string) {
 }
 
 export async function cleanupEmails(userId: string, emailIds: string[]) {
-  const gmail = await getGmailClient(userId);
+  const provider = await getUserEmailProvider(userId);
+  
+  if (!provider) {
+    throw new Error("No email provider connected");
+  }
+
+  // For now, cleanup only works with Gmail (native API support for trash)
+  // Other providers will need different implementations
+  if (provider !== "gmail") {
+    // Just mark as cleaned in database for non-Gmail providers
+    for (const emailId of emailIds) {
+      await prisma.email.update({
+        where: { id: emailId, userId },
+        data: { cleaned: true },
+      });
+    }
+    return { count: emailIds.length };
+  }
+
+  // Gmail-specific cleanup with trash functionality
+  const gmail = await getGmailClientFromProvider(userId);
   
   for (const emailId of emailIds) {
     const email = await prisma.email.findFirst({

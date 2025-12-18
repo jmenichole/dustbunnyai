@@ -25,20 +25,32 @@ export async function generateWeeklyReport(userId: string) {
     },
   });
 
-  // Generate AI summary
-  const prompt = `Generate a brief, friendly weekly email cleanup summary for a user:
+  // Generate AI summary (if OpenAI is configured)
+  let summary = "";
+  if (openai) {
+    try {
+      const prompt = `Generate a brief, friendly weekly email cleanup summary for a user:
 - ${emailsCleaned} emails cleaned
 - ${subscriptionsFound} subscriptions found
 Keep it under 50 words and encouraging.`;
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.7,
-    max_tokens: 100,
-  });
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 100,
+      });
 
-  const summary = response.choices[0]?.message?.content || "";
+      summary = response.choices[0]?.message?.content || "";
+    } catch (error) {
+      console.error("Error generating AI summary:", error);
+    }
+  }
+  
+  // Fallback summary if OpenAI is not available
+  if (!summary) {
+    summary = `Great job this week! You cleaned ${emailsCleaned} emails and discovered ${subscriptionsFound} subscriptions. Keep up the good work!`;
+  }
 
   // Create report
   const report = await prisma.report.create({
